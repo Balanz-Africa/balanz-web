@@ -2,6 +2,7 @@ import type { Screen } from "../types/balanz";
 
 const screenPaths: Record<Screen, string> = {
   landing: "/",
+  download: "/download",
   signin: "/signin",
   signup: "/signup",
   "verify-email": "/verify-email",
@@ -16,6 +17,8 @@ export function pathForScreen(screen: Screen) {
 
 export function screenFromPath(pathname: string): Screen {
   switch (pathname) {
+    case "/download":
+      return "download";
     case "/signin":
       return "signin";
     case "/signup":

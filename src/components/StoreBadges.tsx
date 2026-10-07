@@ -1,5 +1,15 @@
-const APP_STORE_URL = "#";
-const PLAY_STORE_URL = "#";
+import { API_URL } from "../lib/api";
+
+// Stable, forever-correct download links. These point at the BACKEND's
+// /download/* redirect routes (not at a specific build artifact), so when a new
+// APK/TestFlight build ships you only update one env var on the backend —
+// never this file, never a web redeploy. We derive the origin from API_URL by
+// stripping the "/api/v1" suffix, so it tracks whatever API the site is wired to
+// (localhost in dev, the live API in prod).
+const API_ORIGIN = API_URL.replace(/\/api\/v\d+\/?$/, "");
+export const ANDROID_DOWNLOAD_URL = `${API_ORIGIN}/download/android`;
+export const IOS_DOWNLOAD_URL = `${API_ORIGIN}/download/ios`;
+export const SMART_DOWNLOAD_URL = `${API_ORIGIN}/download`;
 
 function AppleGlyph() {
   return (
@@ -23,18 +33,26 @@ function PlayGlyph() {
 export function StoreBadges({ className }: { className?: string }) {
   return (
     <div className={className ? `store-badges ${className}` : "store-badges"}>
-      <a className="store-badge" href={APP_STORE_URL} aria-label="Download on the App Store">
+      <a
+        className="store-badge"
+        href={IOS_DOWNLOAD_URL}
+        aria-label="Download Balanz for iPhone (TestFlight)"
+      >
         <AppleGlyph />
         <span>
-          <small>Download on the</small>
-          <strong>App Store</strong>
+          <small>Download for</small>
+          <strong>iPhone</strong>
         </span>
       </a>
-      <a className="store-badge" href={PLAY_STORE_URL} aria-label="Get it on Google Play">
+      <a
+        className="store-badge"
+        href={ANDROID_DOWNLOAD_URL}
+        aria-label="Download Balanz for Android"
+      >
         <PlayGlyph />
         <span>
-          <small>Get it on</small>
-          <strong>Google Play</strong>
+          <small>Download for</small>
+          <strong>Android</strong>
         </span>
       </a>
     </div>

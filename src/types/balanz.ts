@@ -1,5 +1,6 @@
 export type Screen =
   | "landing"
+  | "download"
   | "signin"
   | "signup"
   | "verify-email"
