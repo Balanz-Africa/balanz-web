@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { AuthScreen } from "./components/AuthScreen";
 import { Dashboard } from "./components/Dashboard";
 import { EmailVerificationScreen } from "./components/EmailVerificationScreen";
+import { DownloadPage } from "./components/DownloadPage";
 import { LandingPage } from "./components/LandingPage";
 import { PasswordResetRequestScreen } from "./components/PasswordResetRequestScreen";
 import { ResetPasswordScreen } from "./components/ResetPasswordScreen";
@@ -154,6 +155,20 @@ export default function App() {
         token={token || undefined}
         onBack={() => navigate(user ? "dashboard" : "signin")}
       />
+    );
+  }
+
+  if (screen === "download") {
+    return (
+      <div className="site-shell">
+        <SiteHeader
+          menuOpen={menuOpen}
+          onMenuToggle={() => setMenuOpen((open) => !open)}
+          onNavigateHome={() => navigate("landing")}
+          onStart={() => navigate("signin")}
+        />
+        <DownloadPage onStart={() => navigate("signin")} />
+      </div>
     );
   }
 
