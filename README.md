@@ -1,149 +1,95 @@
-# Balanz Africa
+# Balanz — Web
 
-A modern, professional landing page for Balanz - a Nigerian personal finance management app that helps users take control of their financial lives.
+The Balanz website and web app: the public marketing site, a browser-based user app (sign in, verify, dashboard), and a separate **admin console** for KYC review — all in one Vite build, talking to the Balanz backend API.
 
-## 🚀 About Balanz
+> Repository: `balanz-web`
 
-Balanz is a comprehensive personal finance tracker designed specifically for Nigerians. It helps users:
+## Two surfaces, one build
 
-- **Smart Bank Integration**: Connect all Nigerian bank accounts securely through Mono API
-- **Real-time Transaction Tracking**: Automatic categorization and monitoring of all spending
-- **Intelligent Budgeting**: Set budgets by category with smart alerts and progress tracking
-- **Financial Insights**: AI-powered analytics showing spending patterns, trends, and savings opportunities
-- **Goal Setting**: Track savings goals, emergency funds, and financial milestones
-- **Secure & Private**: Bank-level security with end-to-end encryption
+`src/main.tsx` picks the surface by path:
 
-## 🎨 Design Features
+- **Public site + user app** (`src/App.tsx`) — everything not under `/admin`.
+- **Admin console** (`src/admin/AdminApp.tsx`) — any path starting with `/admin`. It shares the site's API client and design tokens but keeps its own admin JWT session and no customer state.
 
-- **Modern Fintech Aesthetic**: Dark theme with lime green (#F2FE8D) and orange (#FF6B35) accents
-- **Mobile-First Design**: Fully responsive across all devices
-- **Smooth Animations**: Powered by Framer Motion for engaging user experience
-- **Professional Typography**: Clean, readable fonts with excellent contrast
-- **Nigerian Cultural Elements**: Subtle, professional design that resonates with Nigerian users
+Both talk to the backend (`Balanz-Africa/balanz-backend`) through the shared `request()` client in `src/lib/api.ts`, using a bearer token. No provider secrets live in the client.
 
-## 🛠️ Tech Stack
+## Routes
 
-- **React 19** - Latest React with modern features
-- **TypeScript** - Type-safe development
-- **Vite** - Fast build tool and dev server
-- **Tailwind CSS v4** - Modern utility-first CSS framework
-- **Framer Motion** - Smooth animations and transitions
-- **Lucide React** - Beautiful, customizable icons
+Public / user (`App.tsx`, history-based):
 
-## 📱 Screenshots
+| Path | Screen |
+| --- | --- |
+| `/` | Landing page |
+| `/download` | App download page |
+| `/signin`, `/signup` | Auth |
+| `/verify-email` | Email OTP verification |
+| `/forgot-password`, `/reset-password` | Password reset |
+| `/dashboard` | Signed-in user dashboard (wallet balance, etc.) |
 
-![Balanz Landing Page](/screenshot.png)
+Admin (`/admin`): login → dashboard → KYC document review (list, view, approve, reject) against the backend's `/admin/*` endpoints.
 
-*The landing page showcases a modern, dark-themed design with vibrant lime green and orange accents, featuring a compelling hero section with app mockups and clear calls-to-action.*
+## Tech stack
 
-## 🚀 Getting Started
+- **React 19** + **TypeScript** on **Vite 7**
+- **Tailwind CSS v4** (`@tailwindcss/vite`) + custom CSS in `src/index.css`
+- **Framer Motion** (animation), **Lucide React** (icons)
+- ESLint + Prettier
+
+## Brand
+
+Sky-blue palette, matching the mobile app and backend brand:
+
+- **Primary**: `#0EA5E9` · lighter `#38BDF8` · darker `#0369A1` / `#0284C7`
+- **Ink**: `#0B1220` · **tints**: `#F0F9FF`, `#EAF7FF`
+
+## Project structure
+
+```
+src/
+├── App.tsx              # Public site + user app (routing by screen)
+├── main.tsx             # Entry: routes /admin → AdminApp, else App
+├── components/          # Landing, auth, dashboard, download, site chrome
+├── admin/               # AdminApp, AdminLogin, AdminDashboard, DocumentViewer, adminApi
+├── lib/                 # api.ts (request client), routing.ts
+├── types/               # shared types
+├── assets/              # images
+└── index.css            # global styles / tokens
+```
+
+## Setup
 
 ### Prerequisites
 
 - Node.js 18+
-- npm or yarn
+- A running [balanz-backend](https://github.com/Balanz-Africa/balanz-backend) (local or deployed)
 
-### Installation
+### Install & run
 
-1. Clone the repository:
-```bash
-git clone <repository-url>
-cd balanz-web
-```
-
-2. Install dependencies:
 ```bash
 npm install
+npm run dev        # http://localhost:5173  (admin at /admin)
 ```
 
-3. Start the development server:
+### Environment
+
+Create `.env` (or `.env.local`):
+
+```env
+# Backend API base — include the /api/v1 suffix
+VITE_API_URL=http://localhost:4000/api/v1
+```
+
+Defaults to `http://localhost:4000/api/v1` when unset (`src/lib/api.ts`).
+
+## Scripts
+
 ```bash
-npm run dev
+npm run dev       # Vite dev server
+npm run build     # tsc -b && vite build
+npm run preview   # preview the production build
+npm run lint      # ESLint
 ```
 
-4. Open your browser and navigate to `http://localhost:5173`
+## License
 
-## 📁 Project Structure
-
-```
-balanz-web/
-├── public/
-│   ├── icon.png          # Balanz logo
-│   ├── screenshot.png    # Landing page screenshot
-│   └── vite.svg         # Vite logo
-├── src/
-│   ├── components/       # React components
-│   │   ├── Hero.tsx     # Hero section
-│   │   ├── Features.tsx # Features showcase
-│   │   ├── HowItWorks.tsx # 3-step process
-│   │   ├── Security.tsx # Security features
-│   │   ├── Testimonials.tsx # User reviews
-│   │   ├── Download.tsx # Download section
-│   │   ├── Footer.tsx   # Footer with links
-│   │   └── Navigation.tsx # Header navigation
-│   ├── App.tsx          # Main app component
-│   ├── index.css        # Global styles
-│   └── main.tsx         # App entry point
-├── index.html           # HTML template
-├── tailwind.config.js   # Tailwind configuration
-├── vite.config.ts       # Vite configuration
-└── package.json         # Dependencies
-```
-
-## 🎯 Key Sections
-
-1. **Hero Section** - Compelling headline, value proposition, and app preview
-2. **Features** - Key app capabilities with icons and descriptions
-3. **How It Works** - 3-step process (Connect → Track → Optimize)
-4. **Security** - Trust indicators and security features
-5. **Testimonials** - User reviews and success stories
-6. **Download** - App store buttons and QR codes
-7. **Footer** - Links, contact info, and social media
-
-## 🎨 Brand Colors
-
-- **Primary**: #F2FE8D (Bright lime green)
-- **Background**: #212121 (Dark charcoal)
-- **Secondary**: #2C2C2E (Slightly lighter dark gray)
-- **Text Primary**: #FFFFFF (Pure white)
-- **Text Secondary**: #B0B0B0 (Light gray)
-- **Accent**: #FF6B35 (Orange)
-- **Success**: #4CAF50 (Green)
-- **Danger**: #F44336 (Red)
-
-## 📱 Responsive Design
-
-The landing page is fully responsive and optimized for:
-- **Mobile**: 320px - 768px
-- **Tablet**: 768px - 1024px
-- **Desktop**: 1024px+
-
-## 🔧 Available Scripts
-
-- `npm run dev` - Start development server
-- `npm run build` - Build for production
-- `npm run preview` - Preview production build
-- `npm run lint` - Run ESLint
-
-## 🌍 SEO Optimized
-
-- Meta tags for search engines
-- Open Graph tags for social sharing
-- Twitter Card support
-- Semantic HTML structure
-- Fast loading times
-
-## 📞 Contact
-
-- **Email**: support@balanzafrica.com.ng
-- **Phone**: +234 800 BALANZ
-- **Location**: Lagos, Nigeria
-- **Website**: https://www.balanzafrica.com.ng
-
-## 📄 License
-
-This project is proprietary software for Balanz Africa.
-
----
-
-Built with ❤️ for Nigerians by the Balanz team.
+Private — Balanz Africa.
