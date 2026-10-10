@@ -135,10 +135,10 @@ The landing page is fully responsive and optimized for:
 
 ## 📞 Contact
 
-- **Email**: support@balanzafrica.site
+- **Email**: support@balanzafrica.com.ng
 - **Phone**: +234 800 BALANZ
 - **Location**: Lagos, Nigeria
-- **Website**: https://balanzafrica.site
+- **Website**: https://www.balanzafrica.com.ng
 
 ## 📄 License
 
